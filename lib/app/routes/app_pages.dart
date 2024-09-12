@@ -24,7 +24,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.TIMESELECTION,
-      page: () => const TimeSelectionView(),
+      page: () => TimeSelectionView(),
       binding: TimeSelectionBinding(),
     ),
     GetPage(

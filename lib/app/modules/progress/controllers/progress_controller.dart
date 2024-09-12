@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -63,8 +64,9 @@ class ProgressController extends GetxController {
 
       try {
         await changePhotoDate(asset, ndt);
-      } catch (e) {
-        log(e.toString()); // TODO: 예외처리
+      } catch (e, stack) {
+        FirebaseCrashlytics.instance.recordError(e, stack);
+        log(e.toString());
       }
 
       finishCnt++;
@@ -84,8 +86,9 @@ class ProgressController extends GetxController {
         'newDate': newDate.millisecondsSinceEpoch,
       });
       log(success ? 'Date changed successfully' : 'Failed to change date');
-    } on PlatformException catch (e) {
+    } on PlatformException catch (e, st) {
       log("Failed to change photo date: '${e.message}'.");
+      FirebaseCrashlytics.instance.recordError(e, st);
     }
   }
 }

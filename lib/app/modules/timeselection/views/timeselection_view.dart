@@ -8,7 +8,8 @@ import '../controllers/timeselection_controller.dart';
 enum InputMode { set, add, sub }
 
 class TimeSelectionView extends GetView<TimeSelectionController> {
-  const TimeSelectionView({super.key});
+  final RxBool _buttonEnable = true.obs;
+  TimeSelectionView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +43,16 @@ class TimeSelectionView extends GetView<TimeSelectionController> {
           },
         )),
         SizedBox(height: 10.h),
-        AppButton(
-          text: 'Next',
+        Obx(() => AppButton(
+          text: _buttonEnable.isTrue ? 'Next' : 'Loading...',
+          color: _buttonEnable.isTrue ? null : Colors.grey,
           func: () {
-            controller.nextPage();
+            if (_buttonEnable.isFalse) return;
+            _buttonEnable.value = false;
+
+            controller.onNextButtonClicked();
           },
-        )
+        ),)
       ],
     );
   }

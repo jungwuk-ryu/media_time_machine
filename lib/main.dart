@@ -4,11 +4,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:photo_timemachine/app/services/ad_service.dart';
 
 import 'app/routes/app_pages.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
+  WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) async {
+
+    AdService as = Get.find<AdService>();
+    await as.trackingTransparencyRequest();
+    as.showLaunchAd();
+  });
 
   // Init firebase
   await Firebase.initializeApp();

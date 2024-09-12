@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:photo_timemachine/app/services/ad_service.dart';
 import 'package:photo_timemachine/app/widgets/asset_container.dart';
 import 'package:photo_timemachine/app/widgets/title_text.dart';
 
@@ -66,6 +70,19 @@ class TimeSelectionController extends GetxController {
 
             return AssetContainer(asset, nDT.toString());
           })));
+    }
+  }
+
+  void onNextButtonClicked() {
+    try {
+      AdService adService = Get.find<AdService>();
+      adService.showRewarded(() {
+        nextPage();
+      });
+    } catch (e, st) {
+      FirebaseCrashlytics.instance.recordError(e, st);
+      log('$e');
+      nextPage();
     }
   }
 
