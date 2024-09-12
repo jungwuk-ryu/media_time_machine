@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,9 @@ class ProgressController extends GetxController {
     DateTimeInput second = args['second'];
 
     Map<AssetEntity, DateTime> assetNewDateTimeMap = {};
+
+    FirebaseAnalytics.instance.logEvent(
+        name: 'perform_item_count', parameters: {'value': "${assets.length}"});
 
     for (AssetEntity asset in assets) {
       if (showThumbnail.isTrue) {
