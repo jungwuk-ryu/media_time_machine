@@ -1,16 +1,17 @@
-# photo_timemachine
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
 
-A new Flutter project.
+# Media Time Machine
+<img src="doc/imgs/scr0.png" alt="image description" width="30%" height="30%">    
 
-## Getting Started
+사진과 동영상의 잘못된 시간(날짜) 기록을 쉽게 수정하도록 도와주는 도구입니다.
 
-This project is a starting point for a Flutter application.
+## Features
+<img src="doc/imgs/scr1.png" alt="image description" width="30%" height="30%">
+<img src="doc/imgs/scr2.png" alt="image description" width="30%" height="30%">
+<img src="doc/imgs/scr3.png" alt="image description" width="30%" height="30%">
+<img src="doc/imgs/scr4.png" alt="image description" width="30%" height="30%">  
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 개수 제한 없이 이미지 또는 영상을 선택
+- Year, Month, Day, Hour, Minute, Second 중 원하는 값만 변경 가능
+- 특정 값으로 고정하는 것 외에도 값을 더하거나 뺄 수도 있습니다.
