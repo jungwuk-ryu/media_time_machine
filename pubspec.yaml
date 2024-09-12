@@ -42,6 +42,8 @@ dependencies:
   photo_manager: ^3.3.0
   wechat_assets_picker: ^9.2.1
   flutter_screenutil: ^5.9.3
+  firebase_core: ^3.3.0
+  firebase_crashlytics: ^4.0.4
 
 dev_dependencies:
   flutter_test:
