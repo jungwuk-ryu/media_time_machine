@@ -9,20 +9,19 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:photo_timemachine/app/services/ad_service.dart';
 
 import 'app/routes/app_pages.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-
   WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) async {
-
+    Get.put(AdService());
     AdService as = Get.find<AdService>();
     await as.trackingTransparencyRequest();
+    await MobileAds.instance.initialize();
     as.showLaunchAd();
   });
 
   // Init firebase
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
