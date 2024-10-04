@@ -10,6 +10,7 @@ import 'package:photo_timemachine/app/secrets/my_ad_unit_ids.dart';
 class AdService extends GetxService {
   late AdUnitIds unitIds;
   bool _showRewardAd = false;
+  MobileAds? _mobileAds;
 
   @override
   void onInit() {
@@ -17,28 +18,44 @@ class AdService extends GetxService {
     unitIds = MyAdUnitIds();
   }
 
+  Future<TrackingStatus?> initMobileAds() async {
+    TrackingStatus? status = await trackingTransparencyRequest();
+    log(status.toString());
+    if (status == TrackingStatus.notDetermined) {
+      return status;
+    }
+
+    await MobileAds.instance.initialize();
+    _mobileAds = MobileAds.instance;
+    return status;
+  }
+
   // From https://github.com/deniza/app_tracking_transparency/issues/47#issuecomment-1751719988
-  Future<String?> trackingTransparencyRequest() async {
+  Future<TrackingStatus?> trackingTransparencyRequest() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     if (Platform.isIOS &&
         int.parse(Platform.operatingSystemVersion.split(' ')[1].split('.')[0]) >=
             14) {
-      final TrackingStatus status =
+
+      TrackingStatus status =
       await AppTrackingTransparency.trackingAuthorizationStatus;
-      if (status == TrackingStatus.authorized) {
-        final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-        return uuid;
-      } else if (status == TrackingStatus.notDetermined) {
-        await AppTrackingTransparency.requestTrackingAuthorization();
-        final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-        return uuid;
+
+      if (status == TrackingStatus.notDetermined) {
+        status = await AppTrackingTransparency.requestTrackingAuthorization();
       }
+
+      return status;
     }
 
     return null;
   }
 
   Future<void> showLaunchAd() async {
+    _mobileAds ?? await initMobileAds();
+    if (_mobileAds == null) {
+      return;
+    }
+
     InterstitialAd? interstitialAd;
     String adUnitId = unitIds.getLaunchAdId();
 
@@ -63,6 +80,12 @@ class AdService extends GetxService {
   Future<void> showRewarded(Function() callback) async {
     _showRewardAd = !_showRewardAd;
     if (!_showRewardAd) {
+      callback.call();
+      return;
+    }
+
+    _mobileAds ?? await initMobileAds();
+    if (_mobileAds == null) {
       callback.call();
       return;
     }
